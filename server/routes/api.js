@@ -11,6 +11,18 @@ module.exports = function(app, express) {
 		var session = new Session({
 			
 		});
+		session.save(function(err, newSession){
+			if (err){
+				res.send(err);
+				return;
+			} else {
+				res.json({
+					success: true,
+					message: "New Session Created",
+					sessionId: session._id
+				});
+			}
+		})
 
 	});
 
@@ -31,6 +43,17 @@ module.exports = function(app, express) {
 					success: true,
 					message: "New User Created"
 				});
+			}
+		});
+	});
+
+	api.get('/sessions/:session_id', function(req, res){
+		User.find({ session: req.params.session_id }, function(err, sessions){
+			if (err){
+				res.send(err);
+				return;
+			} else {
+				res.json(sessions);
 			}
 		});
 	});
